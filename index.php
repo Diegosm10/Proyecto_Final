@@ -22,18 +22,23 @@ if (isset($_GET['institucion_id'])) {
 
 <body>
     <?php require_once 'views/inc/topnav.php'; ?>
-    <label for="institucion_id">Institución:</label>
-    <select id="institucion_id" name="institucion_id" onchange="cargarMaterias()" required>
-        <option value="">Seleccione una institución</option>
-        <?php foreach ($instituciones as $institucion): ?>
-            <option value="<?= $institucion['id']; ?>"><?= $institucion['nombre']; ?></option>
-        <?php endforeach; ?>
-    </select>
+    <div class="container">
+        <div class="menu-card">
+            <label for="institucion_id">Institución:</label>
+            <select id="institucion_id" name="institucion_id" onchange="cargarMaterias()" required>
+                <option value="">Seleccione una institución</option>
+                <?php foreach ($instituciones as $institucion): ?>
+                    <option value="<?= $institucion['id']; ?>"><?= $institucion['nombre']; ?></option>
+                <?php endforeach; ?>
+            </select>
 
-    <label for="materia_id">Materia:</label>
-    <select id="materia_id" name="materia_id" required>
-        <option value="">Seleccione una materia</option>
-    </select>
+            <label for="materia_id">Materia:</label>
+            <select id="materia_id" name="materia_id" required>
+                <option value="">Seleccione una materia</option>
+            </select>
+        </div>
+    </div>
+
 </body>
 <script src="views/js/fn.js"></script>
 
