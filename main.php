@@ -1,11 +1,11 @@
 <?php
 
 require_once "conexion.php";
-require_once "controllers\Usuario.php";
-require_once "controllers\Institucion.php";
-require_once "controllers\Profesor.php";
-require_once "controllers\Alumno.php";
-require_once 'controllers\Materia.php';
+require_once "controllers/Usuario.php";
+require_once "controllers/Institucion.php";
+require_once "controllers/Profesor.php";
+require_once "controllers/Alumno.php";
+require_once 'controllers/Materia.php';
 
 $database = new Database();
 $db = $database->connect();
@@ -16,7 +16,7 @@ $usuario = new Usuario($db);
 
 $usuario->nombre = "Diego";
 $usuario->apellido = "Segovia Muñiz";
-$usuario->setEmail("diego666.segovia777@gmail.com");
+$usuario->setEmail("diego1234@gmail.com");
 $usuario->setPassword("diego1234");
 $usuario->condicion = "admin";
 
@@ -29,20 +29,28 @@ if (isset($_POST["profesor"])) {
 
     $usuario = new Usuario($db);
 
-    $usuario->nombre = $_POST["nombre_profesor"];
-    $usuario->apellido = $_POST["apellido"];
-    $usuario->setEmail($_POST["email_profesor"]);
-    $usuario->setPassword($_POST["contrasena"]);
+    $nombre = limpiarCadena($_POST["nombre_profesor"]);
+    $apellido = limpiarCadena($_POST["apellido"]);
+    $email = limpiarCadena($_POST["email_profesor"]);
+    $dni = limpiarCadena($_POST["dni"]);
+    $legajo = limpiarCadena($_POST["legajo"]);
+    $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
+    $password = limpiarCadena($_POST["contrasena"]);
+
+    $usuario->nombre = $nombre;
+    $usuario->apellido = $apellido;
+    $usuario->setEmail($email);
+    $usuario->setPassword($password);
     $usuario->condicion = "profesor";
 
     $profesor = new Profesor($db);
 
-    $profesor->setNombre($_POST["nombre_profesor"]);
-    $profesor->setApellido($_POST["apellido"]);
-    $profesor->setDni($_POST["dni"]);
-    $profesor->setEmail($_POST["email_profesor"]);
-    $profesor->setLegajo($_POST["legajo"]);
-    $profesor->setFechaNacimiento($_POST["fecha_nacimiento"]);
+    $profesor->setNombre($nombre);
+    $profesor->setApellido($apellido);
+    $profesor->setDni($dni);
+    $profesor->setEmail($email);
+    $profesor->setLegajo($legajo);
+    $profesor->setFechaNacimiento($fecha_nacimiento);
 
     $usuario->create();
     $profesor->createProfesor();
@@ -51,9 +59,13 @@ if (isset($_POST["profesor"])) {
 }
 
 if (isset($_POST["asociar_materias_profesor"])) {
-    $profesor_id = intval($_POST["profesor_id"]);
-    $materia_id = intval($_POST["materia_id"]);
-    $institucion_id = intval($_POST["institucion_id"]);
+    $profesor_id = limpiarCadena($_POST["profesor_id"]);
+    $materia_id = limpiarCadena($_POST["materia_id"]);
+    $institucion_id = limpiarCadena($_POST["institucion_id"]);
+
+    $profesor_id = intval($profesor_id);
+    $materia_id = intval($materia_id);
+    $institucion_id = intval($institucion_id);
 
     $consulta = "INSERT INTO materias_profesor (profesor_id, materias_id, institucion_id)
                  VALUES (:profesor_id, :materia_id, :institucion_id)";
@@ -69,11 +81,17 @@ if (isset($_POST["institucion"])) {
 
     $institucion = new Institucion($db);
 
-    $institucion->nombre = $_POST["nombre_institucion"];
-    $institucion->direccion = $_POST["direccion"];
-    $institucion->telefono = $_POST["telefono"];
-    $institucion->setEmail($_POST["email_institucion"]);
-    $institucion->cue = $_POST["cue"];
+    $nombre = limpiarCadena($_POST["nombre_institucion"]);
+    $direccion = limpiarCadena($_POST["direccion"]);
+    $telefono = limpiarCadena($_POST["telefono"]);
+    $email = limpiarCadena($_POST["email_institucion"]);
+    $cue = limpiarCadena($_POST["cue"]);
+
+    $institucion->nombre = $nombre;
+    $institucion->direccion = $direccion;
+    $institucion->telefono = $telefono;
+    $institucion->setEmail($email);
+    $institucion->cue = $cue;
 
     if ($institucion->create()) {
         return "Institucion registrada con éxito";
@@ -84,7 +102,9 @@ if (isset($_POST["materia"])) {
 
     $materia = new Materia($db);
 
-    $materia->nombre = $_POST["nombre_materia"];
+    $nombre = limpiarCadena($_POST["nombre_materia"]);
+
+    $materia->nombre = $nombre;
 
     if ($materia->create()) {
         return "Materia registrada con éxito";
@@ -94,12 +114,15 @@ if (isset($_POST["materia"])) {
 
 if (isset($_POST["asociar_materia_institucion"])) {
 
+    $selector_materia = limpiarCadena($_POST["materias"]);
+    $selector_institucion = limpiarCadena($_POST["instituciones"]);
+
     $consulta = "INSERT INTO materias_institucion (institucion_id, materias_id)
     VALUES (:institucion_id, :materias_id)";
 
     $stmt = $db->prepare($consulta);
-    $selector_materia = intval($_POST["materias"]);
-    $selector_institucion = intval($_POST["instituciones"]);
+    $selector_materia = intval($selector_materia);
+    $selector_institucion = intval($selector_institucion);
 
     $stmt->bindParam(':institucion_id', $selector_institucion);
     $stmt->bindParam(':materias_id', $selector_materia);
@@ -111,11 +134,17 @@ if (isset($_POST["matricular"])) {
 
     $alumno = new Alumno($db);
 
-    $alumno->setNombre($_POST["nombre"]);
-    $alumno->setApellido($_POST["apellido"]);
-    $alumno->setDni($_POST["dni"]);
-    $alumno->setEmail($_POST["email"]);
-    $alumno->setFechaNacimiento($_POST["fecha_nacimiento"]);
+    $nombre = limpiarCadena($_POST["nombre"]);
+    $apellido = limpiarCadena($_POST["nombre"]);
+    $dni = limpiarCadena($_POST["dni"]);
+    $email = limpiarCadena($_POST["email"]);
+    $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
+
+    $alumno->setNombre($nombre);
+    $alumno->setApellido($apellido);
+    $alumno->setDni($dni);
+    $alumno->setEmail($email);
+    $alumno->setFechaNacimiento($fecha_nacimiento);
 
     if ($alumno->createAlumno()) {
         $alumnoId = $db->lastInsertId();
@@ -131,6 +160,18 @@ if (isset($_POST["matricular"])) {
         echo "Error al registrar al alumno.";
     }
 
+}
+
+if (isset($_POST["asociar_alumno_materia"])) {
+    $alumno = new Alumno($db);
+
+    $alumnoId = limpiarCadena($_POST['alumno_id']);
+    $materiaId = limpiarCadena($_POST['materia_id']);
+
+    if ($alumno->matricularAlumno($materiaId, $alumnoId)) {
+        header("location: index.php");
+        exit;
+    }
 }
 
 if (isset($_POST["notas"])) {
@@ -164,18 +205,13 @@ if (isset($_POST['asistencia'])) {
     $materiaId = $_SESSION['materia_id'];
     $alumnoIds = $_POST['alumno_ids'];
     $asistencias = $_POST['asistencias'];
-    var_dump($asistencias);
-    var_dump($alumnoIds);
-
 
     foreach ($alumnoIds as $index => $alumnoId) {
         $asistencia = trim($asistencias[$index]);
 
         if ($asistencia == "presente" || $asistencia == "ausente") {
             Alumno::registrarAsistencia($alumnoId, $materiaId, $fecha, $asistencia);
-            //header("location: index.php");
-            var_dump(Alumno::registrarAsistencia($alumnoId, $materiaId, $fecha, $asistencia));
-            exit;
+            header("location: index.php");
         }
     }
 }

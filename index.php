@@ -1,12 +1,11 @@
 <?php
 require_once "conexion.php";
-require_once "controllers\Institucion.php";
+require_once "controllers/Institucion.php";
 
 $instituciones = Institucion::obtenerInstituciones();
 
 if (isset($_GET['institucion_id'])) {
     $materias = Institucion::obtenerMateriasPorInstitucion($_GET['institucion_id']);
-    header('Content-Type: application/json');
     echo json_encode($materias);
     exit;
 }
@@ -18,11 +17,11 @@ if (isset($_GET['institucion_id'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Listado de alumnos</title>
-    <link rel="stylesheet" href="views\css\styles.css">
+    <link rel="stylesheet" href="views/css/styles.css">
 </head>
 
 <body>
-    <?php require_once 'views\inc\topnav.php'; ?>
+    <?php require_once 'views/inc/topnav.php'; ?>
     <label for="institucion_id">Institución:</label>
     <select id="institucion_id" name="institucion_id" onchange="cargarMaterias()" required>
         <option value="">Seleccione una institución</option>
@@ -36,6 +35,6 @@ if (isset($_GET['institucion_id'])) {
         <option value="">Seleccione una materia</option>
     </select>
 </body>
-<script src="views\js\fn.js"></script>
+<script src="views/js/fn.js"></script>
 
 </html>

@@ -2,18 +2,11 @@
 
 require "conexion.php";
 
-function clean_input($data)
-{
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $email = clean_input($_POST["email"]);
-    $contrasena = clean_input($_POST["contrasena"]);
+    $email = limpiarCadena($_POST["email"]);
+    $contrasena = limpiarCadena($_POST["contrasena"]);
 
     $database = new Database();
 

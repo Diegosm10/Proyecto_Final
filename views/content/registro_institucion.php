@@ -1,34 +1,12 @@
 <?php
 
-require_once __DIR__ . '/../../conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
 
-function obtenerInstituciones()
-{
-    $database = new Database();
-    $db = $database->connect();
+$materias = Materia::obtenerMaterias();
+$instituciones = Institucion::obtenerInstituciones();
 
-    $query = "SELECT id, nombre FROM instituciones";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function obtenerMaterias()
-{
-    $database = new Database();
-    $db = $database->connect();
-
-    $query = "SELECT id, nombre FROM materias";
-    $stmt = $db->prepare($query);
-    $stmt->execute();
-
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-// Obtener las listas
-$instituciones = obtenerInstituciones();
-$materias = obtenerMaterias();
 ?>
 
 <!DOCTYPE html>

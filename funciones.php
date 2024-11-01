@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/../controllers/Alumno.php';
-require_once __DIR__ . '/../controllers/Institucion.php';
-require_once __DIR__ . '/../controllers/Persona.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
 session_start();
 
 function limpiarCadena($cadena)

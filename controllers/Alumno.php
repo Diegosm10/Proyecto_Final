@@ -131,6 +131,18 @@ class Alumno extends Persona
         return false;
     }
 
+    public static function obtenerAlumnos()
+    {
+        $database = new Database();
+        $db = $database->connect();
+
+        $query = "SELECT * FROM alumnos";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public static function obtenerAsistencias($materiaId)
     {
         $database = new Database();

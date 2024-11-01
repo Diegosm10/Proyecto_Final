@@ -1,14 +1,13 @@
 <?php
-require_once __DIR__ . '/../../conexion.php';
-
-require_once __DIR__ . '/../../controllers/Institucion.php';
-
-require_once __DIR__ . '/../../controllers/Profesor.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Profesor.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
 
 $instituciones = Institucion::obtenerInstituciones();
 
 if (isset($_GET['institucion_id'])) {
-    $materias = Institucion::obtenerMateriasPorInstitucion($_GET['institucion_id']);
+    $materias = Materia::obtenerMateriasPorInstitucion($_GET['institucion_id']);
     header('Content-Type: application/json');
     echo json_encode($materias);
     exit;

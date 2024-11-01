@@ -1,16 +1,12 @@
 <?php
-require_once __DIR__ . '/../../conexion.php';
-require_once __DIR__ . '/../../controllers/Institucion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
 
-$instituciones = Institucion::obtenerInstituciones();
 
-if (isset($_GET['institucion_id'])) {
-    $materias = Institucion::obtenerMateriasPorInstitucion($_GET['institucion_id']);
-    header('Content-Type: application/json');
-    echo json_encode($materias);
-    exit;
-}
-?>
+$materias = Materia::obtenerMaterias();
+$alumnos = Alumno::obtenerAlumnos(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -23,9 +19,10 @@ if (isset($_GET['institucion_id'])) {
 
 <body>
     <a href="../../index.php" class="home-btn">Inicio</a>
+
     <div class="container">
         <div class="menu-card">
-            <h2>Matricular Alumno</h2>
+            <h2>Registrar Alumno</h2>
             <form method="POST" action="../../main.php">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
@@ -41,23 +38,38 @@ if (isset($_GET['institucion_id'])) {
 
                 <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+                <button type="submit" name="matricular">Registrar Alumno</button>
+            </form>
+        </div>
 
-                <label for="institucion_id">Institución:</label>
-                <select id="institucion_id" name="institucion_id" onchange="cargarMaterias()" required>
-                    <option value="">Seleccione una institución</option>
-                    <?php foreach ($instituciones as $institucion): ?>
-                        <option value="<?= $institucion['id']; ?>"><?= $institucion['nombre']; ?></option>
+
+        <div class="menu-card">
+            <h2>Matricular a materias</h2>
+            <form method="POST" action="../../main.php">
+                <label for="alumno_id">Alumno:</label>
+                <select id="alumno_id" name="alumno_id" required>
+                    <option value="">Seleccione un alumno</option>
+                    <?php foreach ($alumnos as $alumno): ?>
+                        <option value="<?= $alumno['id']; ?>">
+                            <?= $alumno['nombre'] . ' ' . $alumno['apellido']; ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
 
                 <label for="materia_id">Materia:</label>
                 <select id="materia_id" name="materia_id" required>
                     <option value="">Seleccione una materia</option>
+                    <?php foreach ($materias as $materia): ?>
+                        <option value="<?= $materia['id']; ?>">
+                            <?= $materia['nombre']; ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
 
-                <button type="submit" name="matricular">Matricular Alumno</button>
+                <button type="submit" name="asociar_alumno_materia">Matricular</button>
             </form>
         </div>
+
     </div>
 </body>
 <script src="../js/fn.js"></script>
