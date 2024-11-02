@@ -3,4 +3,5 @@
     <a href="views\content\registro_alumno.php">Matriculacion</a>
     <a href="views\content\registro_asistencia.php">Asistencia</a>
     <a href="views\content\registro_notas.php">Califciaciones</a>
+    <a href="views\content\config.php">RAM</a>
 </div>

@@ -23,7 +23,7 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
     <div class="container">
         <div class="menu-card">
             <h2>Registrar Alumno</h2>
-            <form method="POST" action="../../main.php">
+            <form method="POST" action="../../main.php" id="formulario_registro">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
 
@@ -38,14 +38,15 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
 
                 <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
-                <button type="submit" name="matricular">Registrar Alumno</button>
+                <input type="button" name="matricular" onclick="registrarAlumno()" value="Registrar Alumno">
+                
             </form>
         </div>
 
 
         <div class="menu-card">
             <h2>Matricular a materias</h2>
-            <form method="POST" action="../../main.php">
+            <form method="POST" action="../../main.php" id="formulario_registro">
                 <label for="alumno_id">Alumno:</label>
                 <select id="alumno_id" name="alumno_id" required>
                     <option value="">Seleccione un alumno</option>
@@ -65,13 +66,13 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
-
-                <button type="submit" name="asociar_alumno_materia">Matricular</button>
+                <input type="button" value="Matricular" name="asociar_alumno_materia" onclick="registrarMateriaAlumno()">
             </form>
         </div>
 
     </div>
 </body>
 <script src="../js/fn.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>

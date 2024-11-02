@@ -28,7 +28,7 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
 <body>
     <a href="../../index.php" class="home-btn">Inicio</a>
     <div class="container">
-        <form method="post" action="../../main.php">
+        <form method="post" action="../../main.php" id="formulario_registro">
             <h2>Listado de alumnos matriculados</h2>
             <table id="mi-tabla">
                 <thead>
@@ -74,9 +74,9 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
                     } ?>
                 </tbody>
             </table>
-            <button type="submit" name="notas">Cargar</button>
+            <input type="button" value="Cargar" name="notas" onclick="registrarNotas()">
         </form>
     </div>
 </body>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </html>

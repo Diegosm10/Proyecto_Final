@@ -51,3 +51,95 @@ document.getElementById('materia_id').addEventListener('change', function() {
         .catch(error => console.error('Error al guardar en sesión:', error));
     }
 });
+
+function registrarAlumno(){
+    Swal.fire({
+        title: "¿Registrar alumno?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, registrar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Registrado!",
+            text: "Alumno registrado con éxito",
+            icon: "success",
+            timer: 1600
+          });
+          setTimeout (()=>{
+            document.getElementById("formulario_registro").submit();
+          },1600)
+        }
+      })
+}
+
+function registrarAlumnoMateria(){
+    Swal.fire({
+        title: "¿Estás seguro?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, matricular"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Matriculado!",
+            text: "Alumno matriculado con éxito",
+            icon: "success",
+            timer: 1600
+          });
+          setTimeout (()=>{
+            document.getElementById("formulario_registro").submit();
+          },1600)
+        }
+      })
+}
+
+function registrarNotas(){
+    Swal.fire({
+        title: "¿Registrar notas?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, registrar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Registrado!",
+            text: "Notas registradas con éxito",
+            icon: "success",
+            timer: 1600
+          });
+          setTimeout (()=>{
+            document.getElementById("formulario_registro").submit();
+          },1600)
+        }
+      })
+}
+
+function registrarAsistencia(){
+    Swal.fire({
+        title: "¿Registrar asistencias?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Si, registrar"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Registrado!",
+            text: "Asistencias registradas con éxito",
+            icon: "success",
+            timer: 1600
+          });
+          setTimeout (()=>{
+            document.getElementById("formulario_registro").submit();
+          },1600)
+        }
+      })
+}

@@ -16,8 +16,14 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
     $asistencias = [];
     if (isset($_POST['dias_totales'])) {
         $diasTotales = $_POST['dias_totales'];
-        $asistencias = obtenerPromedioAsistencias($materiaId, $diasTotales);
-        $condiciones = obtenerCondicionAlumnos($asistencias, $promedios, $institucionId);
+        $notas = Alumno::obtenerNotas($materiaId);
+        if(isset($notas) && count($notas) == 3){
+            $asistencias = obtenerPromedioAsistencias($materiaId, $diasTotales);
+            $condiciones = obtenerCondicionAlumnos($asistencias, $promedios, $institucionId);
+        } else {
+            echo 'Hay alumnos que le faltan cargar notas para evaluar su condicion';
+        }
+ 
     }
 
 }
@@ -69,5 +75,6 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
     <?php } ?>
 </body>
 <script src="../js/fn.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>

@@ -91,5 +91,6 @@ $profesores = Profesor::obtenerProfesores();
 
 </body>
 <script src="../js/fn.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </html>
