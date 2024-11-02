@@ -6,23 +6,15 @@ require_once "controllers/Institucion.php";
 require_once "controllers/Profesor.php";
 require_once "controllers/Alumno.php";
 require_once 'controllers/Materia.php';
+require_once 'funciones.php';
 
 $database = new Database();
 $db = $database->connect();
-session_start();
 
 /*
-$usuario = new Usuario($db);
-
-$usuario->nombre = "Diego";
-$usuario->apellido = "Segovia Muñiz";
-$usuario->setEmail("diego1234@gmail.com");
-$usuario->setPassword("diego1234");
-$usuario->condicion = "admin";
-
-if($usuario->create()){
-    echo "admin creado con exito";
-}
+Usuario de administrador
+email: diego1234@gmail.com
+contraseña: diego1234
 */
 
 if (isset($_POST["profesor"])) {
@@ -55,7 +47,7 @@ if (isset($_POST["profesor"])) {
     $usuario->create();
     $profesor->createProfesor();
 
-
+    header("location: views/content/registro_profesor.php");
 }
 
 if (isset($_POST["asociar_materias_profesor"])) {
@@ -75,6 +67,8 @@ if (isset($_POST["asociar_materias_profesor"])) {
     $stmt->bindParam(':materia_id', $materia_id);
     $stmt->bindParam(':institucion_id', $institucion_id);
     $stmt->execute();
+
+    header("location: views/content/registro_profesor.php");
 }
 
 if (isset($_POST["institucion"])) {
@@ -94,7 +88,7 @@ if (isset($_POST["institucion"])) {
     $institucion->cue = $cue;
 
     if ($institucion->create()) {
-        return "Institucion registrada con éxito";
+        header("location: views/content/registro_institucion.php");
     }
 }
 
@@ -107,7 +101,7 @@ if (isset($_POST["materia"])) {
     $materia->nombre = $nombre;
 
     if ($materia->create()) {
-        return "Materia registrada con éxito";
+        header("location: views/content/registro_materias.php");
     }
 
 }
@@ -128,6 +122,8 @@ if (isset($_POST["asociar_materia_institucion"])) {
     $stmt->bindParam(':materias_id', $selector_materia);
 
     $stmt->execute();
+
+    header("location: views/content/registro_institucion.php");
 }
 
 if (isset($_POST["matricular"])) {
@@ -135,7 +131,7 @@ if (isset($_POST["matricular"])) {
     $alumno = new Alumno($db);
 
     $nombre = limpiarCadena($_POST["nombre"]);
-    $apellido = limpiarCadena($_POST["nombre"]);
+    $apellido = limpiarCadena($_POST["apellido"]);
     $dni = limpiarCadena($_POST["dni"]);
     $email = limpiarCadena($_POST["email"]);
     $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
@@ -146,20 +142,9 @@ if (isset($_POST["matricular"])) {
     $alumno->setEmail($email);
     $alumno->setFechaNacimiento($fecha_nacimiento);
 
-    if ($alumno->createAlumno()) {
-        $alumnoId = $db->lastInsertId();
-        $materiaId = $_POST['materia_id'];
-        if ($alumno->matricularAlumno($materiaId, $alumnoId)) {
-            echo "Alumno matriculado correctamente en la materia.";
-            header("location: index.php");
-            exit;
-        } else {
-            echo "Error al matricular al alumno.";
-        }
-    } else {
-        echo "Error al registrar al alumno.";
-    }
-
+    if($alumno->createAlumno()){
+        header("location: views/content/registro_alumno.php");
+    };
 }
 
 if (isset($_POST["asociar_alumno_materia"])) {
@@ -169,7 +154,7 @@ if (isset($_POST["asociar_alumno_materia"])) {
     $materiaId = limpiarCadena($_POST['materia_id']);
 
     if ($alumno->matricularAlumno($materiaId, $alumnoId)) {
-        header("location: index.php");
+        header("location: views/content/registro_alumno.php");
         exit;
     }
 }
@@ -183,19 +168,15 @@ if (isset($_POST["notas"])) {
     $materiaId = $_SESSION['materia_id'];
 
     foreach ($alumnoIds as $alumnoId) {
-        // Usa el ID del alumno como índice para obtener las notas
         $nota1 = isset($notas1[$alumnoId]) ? $notas1[$alumnoId] : null;
         $nota2 = isset($notas2[$alumnoId]) ? $notas2[$alumnoId] : null;
         $nota3 = isset($notas3[$alumnoId]) ? $notas3[$alumnoId] : null;
 
-        // Asegúrate de que las notas no sean nulas antes de registrar
         if ($nota1 !== null && $nota2 !== null && $nota3 !== null) {
             Alumno::registrarNotas($alumnoId, $materiaId, [$nota1, $nota2, $nota3]);
+            header("Location: views/content/registro_notas.php");
         }
     }
-
-
-    header("Location: index.php");
     exit;
 }
 
@@ -211,7 +192,7 @@ if (isset($_POST['asistencia'])) {
 
         if ($asistencia == "presente" || $asistencia == "ausente") {
             Alumno::registrarAsistencia($alumnoId, $materiaId, $fecha, $asistencia);
-            header("location: index.php");
+            header("location: views/content/registro_asistencia.php");
         }
     }
 }
