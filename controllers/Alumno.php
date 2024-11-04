@@ -193,6 +193,7 @@ class Alumno extends Persona
         $stmt->bindParam(':materia_id', $materiaId);
         $stmt->execute();
 
+        //Agrupar las notas por Alumno
         $notas = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $notas[$row['alumno_id']] = [

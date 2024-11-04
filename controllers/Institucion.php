@@ -80,6 +80,25 @@ class Institucion
         return $materias;
     }
 
+    public static function obtenerTodosParametrosRam(){
+        $database = new Database();
+        $db = $database->connect();
+
+        $query = "SELECT * FROM ram";
+        $stmt = $db->prepare($query);
+        $stmt->execute();
+
+        $ram = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        //Agrupar los parametros por Institucion
+        $parametrosPorInstitucion = [];
+        foreach ($ram as $parametro) {
+            $parametrosPorInstitucion[$parametro['institucion_id']] = $parametro;
+        }
+
+        return $parametrosPorInstitucion;
+    }
+
     public static function obtenerParametrosRam($institucionId)
     {
         $database = new Database();

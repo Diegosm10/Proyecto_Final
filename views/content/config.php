@@ -1,14 +1,9 @@
 <?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Institucion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/conexion.php';
 session_start();
-
-if(isset($_SESSION['institucion_id'])){
-    $institucionId = $_SESSION['institucion_id'];
-    $parametros = Institucion::obtenerParametrosRam($institucionId);
+    $parametros = Institucion::obtenerTodosParametrosRam();
     $instituciones = Institucion::obtenerInstituciones();
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,8 +16,10 @@ if(isset($_SESSION['institucion_id'])){
 </head>
 
 <body>
+    <a href="../../index.php" class="home-btn">Inicio</a>
     <div class="container">
-    <table id="mi-tabla">
+        <form method="post" action="../../main.php" id="formulario_registro">
+            <table id="mi-tabla">
                 <thead>
                     <tr>
                         <th>Institucion</th>
@@ -34,18 +31,31 @@ if(isset($_SESSION['institucion_id'])){
                 </thead>
                 <tbody>
                     <?php if (!empty($parametros)) {
-                        foreach ($parametros as $parametro): ?>
+                        foreach ($instituciones as $institucion) { ?>
                             <tr>
-                                <td><?php echo $instituciones['nombre']?></td>
-                                <td><?php echo isset($parametro['nota_regular']) ? $parametro['nota_regular'] : ''; ?></td>
-                                <td><?php echo isset($parametro['nota_promocion']) ? $parametro['nota_promocion'] : ''; ?></td>
-                                <td><?php echo isset($parametro['asistencia_regular']) ? $parametro['asistencia_regular'] : ''; ?></td>
-                                <td><?php echo isset($parametro['asistencia_promocion']) ? $parametro['asistencia_promocion'] : ''; ?></td>
+                                <td><?php echo htmlspecialchars($institucion['nombre'])?></td>
+                                <td>
+                                    <input type="number" name="nota_regular[<?php echo $institucion['id'] ?>]" 
+                                    value="<?php echo isset($parametros[$institucion['id']]['nota_regular']) ? $parametros[$institucion['id']]['nota_regular'] : '' ?>" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="nota_promocion[<?php echo $institucion['id']; ?>]"
+                                    value="<?php echo isset($parametros[$institucion['id']]['nota_promocion']) ? $parametros[$institucion['id']]['nota_promocion'] : '' ?>" required>
+                                </td>
+                                <td>
+                                    <input type="number" name="asistencia_regular[<?php echo $institucion['id'] ?>]"
+                                    value="<?php echo isset($parametros[$institucion['id']]['asistencia_regular']) ? $parametros[$institucion['id']]['asistencia_regular'] : '' ?>" required>
+                                <td>
+                                    <input type="number" name="asistencia_promocion[<?php echo $institucion['id'] ?>]"
+                                    value="<?php echo isset($parametros[$institucion['id']]['asistencia_promocion']) ? $parametros[$institucion['id']]['asistencia_promocion'] : '' ?>" required>
+                                </td>
                             </tr>
-                        <?php endforeach;
+                        <?php };
                     } ?>
                 </tbody>
             </table>
+            <input type="button" value="Modificar" name="parametros_ram" onclick="actualizarParametros()">
+        </form>
     </div>
 </body>
 

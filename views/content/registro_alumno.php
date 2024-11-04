@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Materia.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Alumno.php';
 
 
 $materias = Materia::obtenerMaterias();

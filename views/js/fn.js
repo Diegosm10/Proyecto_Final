@@ -143,3 +143,26 @@ function registrarAsistencia(){
         }
       })
 }
+
+function actualizarParametros(){
+  Swal.fire({
+      title: "¿Actualizar parámetros?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, modificar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Actualizados!",
+          text: "Parametros actualizados con éxito",
+          icon: "success",
+          timer: 1600
+        });
+        setTimeout (()=>{
+          document.getElementById("formulario_registro").submit();
+        },1600)
+      }
+    })
+}
