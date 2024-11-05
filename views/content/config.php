@@ -1,12 +1,13 @@
-<?php 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Institucion.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/conexion.php';
+<?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 session_start();
-    $parametros = Institucion::obtenerTodosParametrosRam();
-    $instituciones = Institucion::obtenerInstituciones();
+$parametros = Institucion::obtenerTodosParametrosRam();
+$instituciones = Institucion::obtenerInstituciones();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,30 +34,40 @@ session_start();
                     <?php if (!empty($parametros)) {
                         foreach ($instituciones as $institucion) { ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($institucion['nombre'])?></td>
+                                <td><input type="hidden" name="institucion_ids[]"
+                                        value="<?php echo $institucion['id']; ?>"><?php echo $institucion['id']; ?>
+                                    <?php echo htmlspecialchars($institucion['nombre']) ?>
+                                </td>
                                 <td>
-                                    <input type="number" name="nota_regular[<?php echo $institucion['id'] ?>]" 
-                                    value="<?php echo isset($parametros[$institucion['id']]['nota_regular']) ? $parametros[$institucion['id']]['nota_regular'] : '' ?>" required>
+                                    <input type="number" name="nota_regular[<?php echo $institucion['id'] ?>]"
+                                        value="<?php echo isset($parametros[$institucion['id']]['nota_regular']) ? $parametros[$institucion['id']]['nota_regular'] : '' ?>"
+                                        required>
                                 </td>
                                 <td>
                                     <input type="number" name="nota_promocion[<?php echo $institucion['id']; ?>]"
-                                    value="<?php echo isset($parametros[$institucion['id']]['nota_promocion']) ? $parametros[$institucion['id']]['nota_promocion'] : '' ?>" required>
+                                        value="<?php echo isset($parametros[$institucion['id']]['nota_promocion']) ? $parametros[$institucion['id']]['nota_promocion'] : '' ?>"
+                                        required>
                                 </td>
                                 <td>
                                     <input type="number" name="asistencia_regular[<?php echo $institucion['id'] ?>]"
-                                    value="<?php echo isset($parametros[$institucion['id']]['asistencia_regular']) ? $parametros[$institucion['id']]['asistencia_regular'] : '' ?>" required>
+                                        value="<?php echo isset($parametros[$institucion['id']]['asistencia_regular']) ? $parametros[$institucion['id']]['asistencia_regular'] : '' ?>"
+                                        required>
                                 <td>
                                     <input type="number" name="asistencia_promocion[<?php echo $institucion['id'] ?>]"
-                                    value="<?php echo isset($parametros[$institucion['id']]['asistencia_promocion']) ? $parametros[$institucion['id']]['asistencia_promocion'] : '' ?>" required>
+                                        value="<?php echo isset($parametros[$institucion['id']]['asistencia_promocion']) ? $parametros[$institucion['id']]['asistencia_promocion'] : '' ?>"
+                                        required>
                                 </td>
                             </tr>
-                        <?php };
+                        <?php }
+                        ;
                     } ?>
                 </tbody>
             </table>
-            <input type="button" value="Modificar" name="parametros_ram" onclick="actualizarParametros()">
+            <input type="button" value="Modificar" name="modificar_parametros" onclick="actualizarParametros()">
         </form>
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/fn.js"></script>
 
 </html>

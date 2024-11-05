@@ -142,9 +142,10 @@ if (isset($_POST["matricular"])) {
     $alumno->setEmail($email);
     $alumno->setFechaNacimiento($fecha_nacimiento);
 
-    if($alumno->createAlumno()){
+    if ($alumno->createAlumno()) {
         header("location: views/content/registro_alumno.php");
-    };
+    }
+    ;
 }
 
 if (isset($_POST["asociar_alumno_materia"])) {
@@ -193,6 +194,26 @@ if (isset($_POST['asistencia'])) {
         if ($asistencia == "presente" || $asistencia == "ausente") {
             Alumno::registrarAsistencia($alumnoId, $materiaId, $fecha, $asistencia);
             header("location: views/content/registro_asistencia.php");
+        }
+    }
+}
+
+if (isset($_POST['modificar_parametros'])) {
+    $institucionids = $_POST['institucion_ids'];
+    $nota_regular = $_POST['nota_regular'];
+    $nota_promocion = $_POST['nota_promocion'];
+    $asistencia_regular = $_POST['asistencia_regular'];
+    $asistencia_promocion = $_POST['asistencia_promocion'];
+
+    foreach ($institucionids as $institucionid) {
+        $nota_regular = isset($nota_regular[$institucionid]) ? ($nota_regular[$institucionid]) : null;
+        $nota_promocion = isset($nota_promocion[$institucionid]) ? ($nota_promocion[$institucionid]) : null;
+        $asistencia_regular = isset($asistencia_regular[$institucionid]) ? ($asistencia_regular[$institucionid]) : null;
+        $asistencia_promocion = isset($asistencia_promocion[$institucionid]) ? ($asistencia_promocion[$institucionid]) : null;
+
+        if ($nota_regular !== null && $nota_promocion !== null && $asistencia_regular !== null && $nota_promocion !== null) {
+            Institucion::actualizarParametros($institucionid, $nota_regular, $nota_promocion, $asistencia_regular, $nota_promocion);
+            header("location: views/content/config.php");
         }
     }
 }

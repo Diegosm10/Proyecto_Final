@@ -80,7 +80,8 @@ class Institucion
         return $materias;
     }
 
-    public static function obtenerTodosParametrosRam(){
+    public static function obtenerTodosParametrosRam()
+    {
         $database = new Database();
         $db = $database->connect();
 
@@ -112,5 +113,25 @@ class Institucion
         $ram = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         return $ram;
+    }
+
+    public static function actualizarParametros($institucionId, $nota_regular, $nota_promocion, $asistencia_regular, $asistencia_promocion)
+    {
+        $database = new Database();
+        $db = $database->connect();
+
+        $query = "UPDATE ram SET nota_regular = :nota_regular, nota_promocion = :nota_promocion, 
+        asistencia_regular = :asistencia_regular, asistencia_promocion = :asistencia_promocion
+        WHERE institucion_id = :institucion_id";
+
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':institucion_id', $institucionId);
+        $stmt->bindParam(':nota_regular', $nota_regular);
+        $stmt->bindParam(':nota_promocion', $nota_promocion);
+        $stmt->bindParam(':asistencia_regular', $asistencia_regular);
+        $stmt->bindParam(':asistencia_promocion', $asistencia_promocion);
+
+        $stmt->execute();
+
     }
 }

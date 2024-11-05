@@ -1,8 +1,8 @@
 <?php
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/conexion.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Alumno.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Persona.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
 
 session_start();
 
@@ -64,7 +64,7 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
                     } ?>
                 </tbody>
             </table>
-            <input type="button" value="Guardar" name="asistencia" onclick="registrarAsistenica()">
+            <input type="button" value="Guardar" name="asistencia" onclick="registrarAsistencia()">
         </form>
     </div>
 </body>

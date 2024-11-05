@@ -1,7 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/conexion.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Materia.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/Proyecto_final/controllers/Alumno.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
 
 
 $materias = Materia::obtenerMaterias();
@@ -39,7 +39,7 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
                 <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
                 <input type="button" name="matricular" onclick="registrarAlumno()" value="Registrar Alumno">
-                
+
             </form>
         </div>
 
@@ -66,7 +66,8 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <input type="button" value="Matricular" name="asociar_alumno_materia" onclick="registrarMateriaAlumno()">
+                <input type="button" value="Matricular" name="asociar_alumno_materia"
+                    onclick="registrarMateriaAlumno()">
             </form>
         </div>
 

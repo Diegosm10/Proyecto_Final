@@ -75,7 +75,7 @@ function registrarAlumno(){
       })
 }
 
-function registrarAlumnoMateria(){
+function registrarMateriaAlumno(){
     Swal.fire({
         title: "¿Estás seguro?",
         icon: "warning",
