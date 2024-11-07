@@ -1,6 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 $alumnoId = $_GET['id'];
 
@@ -14,6 +15,27 @@ if ($alumnoId) {
 } else {
     echo "ID de alumno no especificado.";
     exit;
+}
+$errors = [];
+if (!empty($_GET)) {
+    foreach ($_GET as $key => $message) {
+        $errors[$key] = htmlspecialchars($message);
+    }
+}
+
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
 }
 ?>
 
@@ -44,7 +66,8 @@ if ($alumnoId) {
                     value="<?php echo htmlspecialchars($alumno['apellido']); ?>" required>
 
                 <label for="dni">DNI:</label>
-                <input type="text" id="dni" name="dni" value="<?php echo htmlspecialchars($alumno['dni']); ?>" required>
+                <input type="text" id="dni" name="dni" value="<?php echo htmlspecialchars($alumno['dni']); ?>" required
+                    minlength="7" maxlength="8">
 
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($alumno['email']); ?>"

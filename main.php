@@ -35,6 +35,25 @@ if (isset($_POST["profesor"])) {
     $usuario->setPassword($password);
     $usuario->condicion = "profesor";
 
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+        $errors['nombre'] = "El nombre solo puede contener letras.";
+    }
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
+        $errors['apellido'] = "El apellido solo puede contener letras.";
+    }
+    if (verificarDatos("^\d{7,8}$", $dni)) {
+        $errors['dni'] = "El DNI debe ser un número de 7 u 8 dígitos.";
+    }
+    if (verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
+        $errors['email'] = "Por favor ingrese un email válido.";
+    }
+
+    if (!empty($errors)) {
+        $query = http_build_query($errors);
+        header("Location: views/content/registro_alumno.php?$query");
+        exit;
+    }
+
     $profesor = new Profesor($db);
 
     $profesor->setNombre($nombre);
@@ -46,7 +65,7 @@ if (isset($_POST["profesor"])) {
 
     $usuario->create();
     $profesor->createProfesor();
-
+    $_SESSION['mensaje_exito'] = "El profesor se registró exitosamente.";
     header("location: views/content/registro_profesor.php");
 }
 
@@ -67,11 +86,12 @@ if (isset($_POST["asociar_materias_profesor"])) {
     $stmt->bindParam(':materia_id', $materia_id);
     $stmt->bindParam(':institucion_id', $institucion_id);
     $stmt->execute();
-
+    $_SESSION['mensaje_exito'] = "La materia se registró exitosamente.";
     header("location: views/content/registro_profesor.php");
 }
 
 if (isset($_POST["institucion"])) {
+    $errors = [];
 
     $institucion = new Institucion($db);
 
@@ -80,6 +100,12 @@ if (isset($_POST["institucion"])) {
     $telefono = limpiarCadena($_POST["telefono"]);
     $email = limpiarCadena($_POST["email_institucion"]);
     $cue = limpiarCadena($_POST["cue"]);
+    $nota_regular = limpiarCadena($_POST["nota_regular"]);
+    $nota_promocion = limpiarCadena($_POST["nota_promocion"]);
+    $asistencia_regular = limpiarCadena($_POST["asistencia_regular"]);
+    $asistencia_promocion = limpiarCadena($_POST["asistencia_promocion"]);
+
+
 
     $institucion->nombre = $nombre;
     $institucion->direccion = $direccion;
@@ -88,19 +114,36 @@ if (isset($_POST["institucion"])) {
     $institucion->cue = $cue;
 
     if ($institucion->create()) {
-        header("location: views/content/registro_institucion.php");
+        $institucionId = $db->lastInsertId();
+
+        $parametros = Institucion::insertarParametrosRam($nota_regular, $nota_promocion, $asistencia_regular, $asistencia_promocion, $institucionId);
+        $_SESSION['mensaje_exito'] = "La institución se registró exitosamente.";
+        header("Location: views/content/registro_institucion.php");
     }
 }
 
 if (isset($_POST["materia"])) {
+    $errors = [];
+
 
     $materia = new Materia($db);
 
     $nombre = limpiarCadena($_POST["nombre_materia"]);
 
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+        $errors['nombre'] = "El nombre solo puede contener letras.";
+    }
+
+    if (!empty($errors)) {
+        $query = http_build_query($errors);
+        header("Location: views/content/registro_materias.php?$query");
+        exit;
+    }
+
     $materia->nombre = $nombre;
 
     if ($materia->create()) {
+        $_SESSION['mensaje_exito'] = "La materia se registró exitosamente.";
         header("location: views/content/registro_materias.php");
     }
 
@@ -121,20 +164,44 @@ if (isset($_POST["asociar_materia_institucion"])) {
     $stmt->bindParam(':institucion_id', $selector_institucion);
     $stmt->bindParam(':materias_id', $selector_materia);
 
-    $stmt->execute();
+    if ($stmt->execute()) {
+        $_SESSION['mensaje_exito'] = "La materia se registró exitosamente.";
+        header("location: views/content/registro_institucion.php");
+    }
 
-    header("location: views/content/registro_institucion.php");
+
 }
 
 if (isset($_POST["matricular"])) {
+    $errors = [];
 
-    $alumno = new Alumno($db);
+
 
     $nombre = limpiarCadena($_POST["nombre"]);
     $apellido = limpiarCadena($_POST["apellido"]);
     $dni = limpiarCadena($_POST["dni"]);
     $email = limpiarCadena($_POST["email"]);
     $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
+
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+        $errors['nombre'] = "El nombre solo puede contener letras.";
+    }
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
+        $errors['apellido'] = "El apellido solo puede contener letras.";
+    }
+    if (verificarDatos("^\d{7,8}$", $dni)) {
+        $errors['dni'] = "El DNI debe ser un número de 7 u 8 dígitos.";
+    }
+    if (verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
+        $errors['email'] = "Por favor ingrese un email válido.";
+    }
+
+    if (!empty($errors)) {
+        $query = http_build_query($errors);
+        header("Location: views/content/registro_alumno.php?$query");
+        exit;
+    }
+    $alumno = new Alumno($db);
 
     $alumno->setNombre($nombre);
     $alumno->setApellido($apellido);
@@ -143,6 +210,7 @@ if (isset($_POST["matricular"])) {
     $alumno->setFechaNacimiento($fecha_nacimiento);
 
     if ($alumno->createAlumno()) {
+        $_SESSION['mensaje_exito'] = "El alumno se registró exitosamente.";
         header("location: views/content/registro_alumno.php");
     }
     ;
@@ -156,6 +224,7 @@ if (isset($_POST["asociar_alumno_materia"])) {
     $resultado = Alumno::matricularAlumno($materiaId, $alumnoId);
 
     if ($resultado) {
+        $_SESSION['mensaje_exito'] = "Alumno matriculado exitosamente.";
         header("location: views/content/registro_alumno.php");
         exit;
     }
@@ -176,9 +245,11 @@ if (isset($_POST["notas"])) {
 
         if ($nota1 !== null && $nota2 !== null && $nota3 !== null) {
             Alumno::registrarNotas($alumnoId, $materiaId, [$nota1, $nota2, $nota3]);
-            header("Location: views/content/registro_notas.php");
+
         }
     }
+    $_SESSION['mensaje_exito'] = "Las notas se registraron exitosamente.";
+    header("Location: views/content/registro_notas.php");
     exit;
 }
 
@@ -194,9 +265,12 @@ if (isset($_POST['asistencia'])) {
 
         if ($asistencia == "presente" || $asistencia == "ausente") {
             Alumno::registrarAsistencia($alumnoId, $materiaId, $fecha, $asistencia);
-            header("location: views/content/registro_asistencia.php");
+
         }
     }
+    $_SESSION['mensaje_exito'] = "Las asistencias se registraron exitosamente.";
+    header("location: views/content/registro_asistencia.php");
+    exit;
 }
 
 if (isset($_POST['modificar_parametros'])) {
@@ -212,16 +286,13 @@ if (isset($_POST['modificar_parametros'])) {
         $asistencia_regular_value = isset($asistencia_regular[$institucionid]) ? $asistencia_regular[$institucionid] : null;
         $asistencia_promocion_value = isset($asistencia_promocion[$institucionid]) ? $asistencia_promocion[$institucionid] : null;
 
-        // Verificamos que todos los parámetros estén presentes antes de actualizar
         if ($nota_regular_value !== null && $nota_promocion_value !== null && $asistencia_regular_value !== null && $asistencia_promocion_value !== null) {
-            // Llamamos a la función de actualización con los parámetros correctos
             Institucion::actualizarParametros($institucionid, $nota_regular_value, $nota_promocion_value, $asistencia_regular_value, $asistencia_promocion_value);
         }
     }
-
-    // Después de actualizar todos los parámetros, redirigimos
+    $_SESSION['mensaje_exito'] = "Los parametros se modificaron exitosamente.";
     header("location: views/content/config.php");
-    exit; // Asegúrate de que el script no continúe ejecutándose después de la redirección
+    exit;
 }
 
 if (isset($_POST["editar_alumno"])) {
@@ -232,6 +303,25 @@ if (isset($_POST["editar_alumno"])) {
     $email = limpiarCadena($_POST["email"]);
     $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
 
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+        $errors['nombre'] = "El nombre solo puede contener letras.";
+    }
+    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
+        $errors['apellido'] = "El apellido solo puede contener letras.";
+    }
+    if (verificarDatos("^\d{7,8}$", $dni)) {
+        $errors['dni'] = "El DNI debe ser un número de 7 u 8 dígitos.";
+    }
+    if (verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
+        $errors['email'] = "Por favor ingrese un email válido.";
+    }
+
+    if (!empty($errors)) {
+        $query = http_build_query($errors);
+        header("Location: views/content/registro_alumno.php?$query");
+        exit;
+    }
+
     $alumno = new Alumno($db);
     $alumno->setNombre($nombre);
     $alumno->setApellido($apellido);
@@ -240,6 +330,7 @@ if (isset($_POST["editar_alumno"])) {
     $alumno->setFechaNacimiento($fecha_nacimiento);
 
     if ($alumno->actualizarAlumno($alumnoId)) {
+        $_SESSION['mensaje_exito'] = "El alumno se modificó exitosamente.";
         header("Location: /views/content/mostrar_alumnos.php");
         exit;
     } else {

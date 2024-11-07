@@ -41,8 +41,6 @@
                                                     </div>
                                                 </div>
                                                 <button type="submit" class="btn mt-4">Iniciar sesion</button>
-                                                <p class="mb-0 mt-4 text-center"><a href="#0" class="link">Olvidaste la
-                                                        contraseña?</a></p>
                                             </div>
                                         </div>
                                     </div>

@@ -100,6 +100,23 @@ class Institucion
         return $parametrosPorInstitucion;
     }
 
+    public static function insertarParametrosRam($nota_regular, $nota_promocion, $asistencia_regular, $asistencia_promocion, $institucionId)
+    {
+        $database = new Database();
+        $db = $database->connect();
+
+        $query = "INSERT INTO ram (nota_regular, nota_promocion, asistencia_regular, asistencia_promocion, institucion_id) 
+        VALUES (:nota_regular, :nota_promocion, :asistencia_regular, :asistencia_promocion, :institucion_id)";
+
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':nota_regular', $nota_regular);
+        $stmt->bindParam(':nota_promocion', $nota_promocion);
+        $stmt->bindParam(':asistencia_regular', $asistencia_regular);
+        $stmt->bindParam('asistencia_promocion', $asistencia_promocion);
+        $stmt->bindParam(':institucion_id', $institucionId);
+
+        $stmt->execute();
+    }
     public static function obtenerParametrosRam($institucionId)
     {
         $database = new Database();

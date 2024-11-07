@@ -3,6 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Profesor.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 $instituciones = Institucion::obtenerInstituciones();
 
@@ -12,7 +13,27 @@ if (isset($_GET['institucion_id'])) {
     echo json_encode($materias);
     exit;
 }
+$errors = [];
+if (!empty($_GET)) {
+    foreach ($_GET as $key => $message) {
+        $errors[$key] = htmlspecialchars($message);
+    }
+}
 $profesores = Profesor::obtenerProfesores();
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
+}
 
 ?>
 <!DOCTYPE html>
@@ -40,13 +61,13 @@ $profesores = Profesor::obtenerProfesores();
                 <input type="text" name="apellido" id="apellido" required>
 
                 <label for="dni">DNI:</label>
-                <input type="text" name="dni" id="dni" required>
+                <input type="text" name="dni" id="dni" required minlength="7" maxlength="8">
 
                 <label for="fecha_nacimiento">Fecha de nacimiento:</label>
                 <input type="date" name="fecha_nacimiento" id="fecha_nacimiento" required>
 
                 <label for="email_profesor">Email</label>
-                <input type="text" name="email_profesor" id="email_profesor" required>
+                <input type="email" name="email_profesor" id="email_profesor" required>
 
                 <label for="legajo">Legajo:</label>
                 <input type="text" name="legajo" id="legajo" minlength="8" maxlength="8" required>
@@ -54,7 +75,7 @@ $profesores = Profesor::obtenerProfesores();
                 <label for="contrasena">Contraseña:</label>
                 <input type="text" name="contrasena" id="contrasena" required>
 
-                <input type="button" name="profesor" class="btn-registro">Registrar
+                <button type="submit" name="profesor" class="btn-registro">Registrar</button>
             </form>
         </div>
 

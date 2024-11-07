@@ -1,6 +1,11 @@
 <?php
 require_once "conexion.php";
 require_once "controllers/Institucion.php";
+require_once "controllers/Usuario.php";
+include("guardar_sesion.php");
+
+$correo = $_SESSION['email'];
+$usuario = Usuario::obtenerUsuario($correo);
 
 $instituciones = Institucion::obtenerInstituciones();
 
@@ -24,6 +29,7 @@ if (isset($_GET['institucion_id'])) {
     <?php require_once 'views/inc/topnav.php'; ?>
     <div class="container">
         <div class="menu-card">
+            <h2>Bienvenido <?php echo $usuario['nombre'] . ' ' . $usuario['apellido']; ?></h2>
             <label for="institucion_id">Institución:</label>
             <select id="institucion_id" name="institucion_id" onchange="cargarMaterias()" required>
                 <option value="">Seleccione una institución</option>

@@ -1,3 +1,26 @@
+<?php
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
+$errors = [];
+if (!empty($_GET)) {
+    foreach ($_GET as $key => $message) {
+        $errors[$key] = htmlspecialchars($message);
+    }
+}
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 

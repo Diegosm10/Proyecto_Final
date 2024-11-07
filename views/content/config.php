@@ -1,9 +1,24 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
-session_start();
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
+
 $parametros = Institucion::obtenerTodosParametrosRam();
 $instituciones = Institucion::obtenerInstituciones();
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -41,21 +56,21 @@ $instituciones = Institucion::obtenerInstituciones();
                                 <td>
                                     <input type="number" name="nota_regular[<?php echo $institucion['id'] ?>]"
                                         value="<?php echo isset($parametros[$institucion['id']]['nota_regular']) ? $parametros[$institucion['id']]['nota_regular'] : '' ?>"
-                                        required>
+                                        required min="0" max="10">
                                 </td>
                                 <td>
                                     <input type="number" name="nota_promocion[<?php echo $institucion['id']; ?>]"
                                         value="<?php echo isset($parametros[$institucion['id']]['nota_promocion']) ? $parametros[$institucion['id']]['nota_promocion'] : '' ?>"
-                                        required>
+                                        required min="0" max="10">
                                 </td>
                                 <td>
                                     <input type="number" name="asistencia_regular[<?php echo $institucion['id'] ?>]"
                                         value="<?php echo isset($parametros[$institucion['id']]['asistencia_regular']) ? $parametros[$institucion['id']]['asistencia_regular'] : '' ?>"
-                                        required>
+                                        required min="0" max="100">
                                 <td>
                                     <input type="number" name="asistencia_promocion[<?php echo $institucion['id'] ?>]"
                                         value="<?php echo isset($parametros[$institucion['id']]['asistencia_promocion']) ? $parametros[$institucion['id']]['asistencia_promocion'] : '' ?>"
-                                        required>
+                                        required min="0" max="100">
                                 </td>
                             </tr>
                         <?php }

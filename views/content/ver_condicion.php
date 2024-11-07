@@ -2,6 +2,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/funciones.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
     $institucionId = $_SESSION['institucion_id'];
@@ -15,24 +16,21 @@ $promedios = obtenerPromedioNotas($materiaId);
 
 $asistencias = [];
 $condiciones = [];
-$notasCompletas = true; // Variable para verificar si todas las notas están registradas
+$notasCompletas = true;
 
 if (isset($_POST['dias_totales']) && $_POST['dias_totales'] > 0) {
     $diasTotales = $_POST['dias_totales'];
 
-    // Obtenemos las notas de los alumnos
     $notas = Alumno::obtenerNotas($materiaId);
 
-    // Verificar si faltan notas para algún alumno
     foreach ($alumnos as $alumno) {
         $alumnoId = $alumno['id'];
         if (empty($notas[$alumnoId])) {
-            $notasCompletas = false;  // Si falta alguna nota, marcamos como incompleto
+            $notasCompletas = false;
             break;
         }
     }
 
-    // Si todas las notas están completas, calculamos la asistencia y las condiciones
     if ($notasCompletas) {
         $asistencias = obtenerPromedioAsistencias($materiaId, $diasTotales);
         $condiciones = obtenerCondicionAlumnos($asistencias, $promedios, $institucionId);

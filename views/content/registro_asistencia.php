@@ -3,14 +3,30 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
-session_start();
+
 
 if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
     $institucionId = $_SESSION['institucion_id'];
     $materiaId = $_SESSION['materia_id'];
 
     $alumnos = Alumno::mostrarAlumnosMatriculados($institucionId, $materiaId);
+}
+
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
 }
 ?>
 

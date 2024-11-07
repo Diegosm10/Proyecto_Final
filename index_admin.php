@@ -1,3 +1,7 @@
+<?php
+include("conexion.php");
+include("guardar_sesion.php");
+?>
 <!DOCTYPE html>
 <html lang="en">
 

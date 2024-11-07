@@ -3,10 +3,32 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Institucion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 $materias = Materia::obtenerMaterias();
 $instituciones = Institucion::obtenerInstituciones();
 
+$errors = [];
+if (!empty($_GET)) {
+    foreach ($_GET as $key => $message) {
+        $errors[$key] = htmlspecialchars($message);
+    }
+}
+
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,20 +62,20 @@ $instituciones = Institucion::obtenerInstituciones();
                 <input type="email" name="email_institucion" id="email_institucion" required>
 
                 <label for="cue">CUE:</label>
-                <input type="text" name="cue" id="cue" minlength="8" maxlength="8" required>
+                <input type="text" name="cue" id="cue" minlength="9" maxlength="9" required>
 
                 <p>Parametros RAM:</p>
                 <label for="nota_regular">Nota para regular:</label>
-                <input type="number" name="nota_regular" id="nota_regular" required>
+                <input type="number" name="nota_regular" id="nota_regular" required min="0" max="10">
 
                 <label for="nota_promocion">Nota para promoción:</label>
-                <input type="number" name="nota_promocion" id="nota_promocion" required>
+                <input type="number" name="nota_promocion" id="nota_promocion" required min="0" max="10">
 
                 <label for="asistencia_regular">Asistencia para regular:</label>
-                <input type="number" name="asistencia_regular" id="asistencia_regular" required>
+                <input type="number" name="asistencia_regular" id="asistencia_regular" required min="0" max="100">
 
                 <label for="asistencia_promocion">Asistencia para promoción:</label>
-                <input type="number" name="asistencia_promocion" id="asistencia_promocion" required>
+                <input type="number" name="asistencia_promocion" id="asistencia_promocion" required min="0" max="100">
 
                 <button type="submit" name="institucion" class="btn-registro">Registrar</button>
             </form>
@@ -62,7 +84,7 @@ $instituciones = Institucion::obtenerInstituciones();
 
         <div class="menu-card">
             <h2>Añadir materias a instituciones</h2>
-            <form action="main.php" method="post" class="formulario">
+            <form action="../../main.php" method="post">
 
                 <label for="materias">Materia:</label>
                 <select id="materias" name="materias">
@@ -80,7 +102,7 @@ $instituciones = Institucion::obtenerInstituciones();
                     <?php endforeach; ?>
                 </select>
 
-                <button type="submit" name="asociar_materia" class="btn-registro">Agregar
+                <button type="submit" name="asociar_materia_institucion" class="btn-registro">Agregar
                     materia</button>
 
             </form>

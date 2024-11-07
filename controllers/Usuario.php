@@ -1,6 +1,7 @@
 <?php
 
-class Usuario{
+class Usuario
+{
 
     private $conn;
     private $table = 'usuarios';
@@ -34,6 +35,20 @@ class Usuario{
         return false;
     }
 
+    public static function obtenerUsuario($correo)
+    {
+        $database = new Database();
+        $db = $database->connect();
+
+        $query = "SELECT * FROM usuarios WHERE email = :email";
+
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':email', $correo);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
     public function getNombre()
     {
         return $this->nombre;
@@ -48,7 +63,7 @@ class Usuario{
     {
         return $this->email;
     }
-  
+
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
@@ -62,16 +77,13 @@ class Usuario{
 
     public function setEmail($email)
     {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->email = $email;
-        } else {
-            throw new Exception("Email inválido.");
-        }
+        $this->email = $email;
     }
     public function setPassword($password)
     {
         $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
-    
+
+
 
 }

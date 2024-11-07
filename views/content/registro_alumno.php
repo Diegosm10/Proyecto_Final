@@ -2,7 +2,28 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Materia.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
+$errors = [];
+if (!empty($_GET)) {
+    foreach ($_GET as $key => $message) {
+        $errors[$key] = htmlspecialchars($message);
+    }
+}
+if (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
+}
 
 $materias = Materia::obtenerMaterias();
 $alumnos = Alumno::obtenerAlumnos(); ?>
@@ -26,18 +47,27 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
             <form method="post" action="../../main.php" id="registroFormAlumno">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
+                <span class="error-message"><?php echo $errors['nombre'] ?? ''; ?></span>
+                <br>
 
                 <label for="apellido">Apellido:</label>
                 <input type="text" id="apellido" name="apellido" required>
+                <span class="error-message"><?php echo $errors['apellido'] ?? ''; ?></span>
+                <br>
 
                 <label for="dni">DNI:</label>
-                <input type="text" id="dni" name="dni" required>
+                <input type="text" id="dni" name="dni" required minlength="7" maxlength="8">
+                <span class="error-message"><?php echo $errors['dni'] ?? ''; ?></span>
+                <br>
 
                 <label for="email">Email:</label>
                 <input type="email" id="email" name="email" required>
+                <span class="error-message"><?php echo $errors['email'] ?? ''; ?></span>
+                <br>
 
                 <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+
                 <button type="submit" class="btn-registro" name="matricular">Registrar</button>
             </form>
         </div>

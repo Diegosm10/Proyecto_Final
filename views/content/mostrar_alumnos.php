@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/funciones.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 
 if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
