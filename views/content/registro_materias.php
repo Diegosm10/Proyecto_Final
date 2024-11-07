@@ -13,16 +13,17 @@
     <div class="container">
         <div class="menu-card">
             <h2>Registrar materias</h2>
-            <form action="main.php" method="post">
+            <form action="../../main.php" method="post">
 
                 <label for="nombre_materia">Nombre</label>
                 <input type="text" name="nombre_materia" id="nombre_materia" required>
 
-                <button type="submit" name="materia">Registrar materia</button>
-
+                <button type="submit" name="materia" class="btn-registro">Registrar</button>
             </form>
         </div>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</html>l
+<script src="../js/fn.js"></script>
+
+</html>

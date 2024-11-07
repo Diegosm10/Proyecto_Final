@@ -29,13 +29,65 @@ class Alumno extends Persona
         return false;
     }
 
-    public function matricularAlumno($materiaId, $alumnoId)
+    public function actualizarAlumno($id)
     {
+        $query = "UPDATE alumnos SET nombre = :nombre, apellido = :apellido, dni = :dni, email = :email, fecha_nacimiento = :fecha_nacimiento WHERE alumnos.id = :alumnos_id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':nombre', $this->nombre);
+        $stmt->bindParam(':apellido', $this->apellido);
+        $stmt->bindParam(':dni', $this->dni);
+        $stmt->bindParam(':email', $this->email);
+        $stmt->bindParam(':fecha_nacimiento', $this->fecha_nacimiento);
+        $stmt->bindParam(':alumnos_id', $id);
+
+        return $stmt->execute();
+    }
+
+    public static function eliminarAlumno($alumnoId)
+    {
+        try {
+            $database = new Database();
+            $db = $database->connect();
+
+            $query = "DELETE FROM alumnos WHERE alumnos.id = :alumnos_id";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':alumnos_id', $alumnoId, PDO::PARAM_INT);
+            $stmt->execute();
+
+            if ($stmt->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+
+        } catch (PDOException $e) {
+            echo "Error al eliminar alumno: " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function obtenerAlumnoPorId($id)
+    {
+        $database = new Database();
+        $db = $database->connect();
+
+        $query = "SELECT * FROM alumnos WHERE id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function matricularAlumno($materiaId, $alumnoId)
+    {
+        $database = new Database();
+        $db = $database->connect();
+
         $query = "INSERT INTO calificaciones (alumno_id, materia_id)
         VALUES (:alumno_id, :materia_id)";
 
-        $stmt = $this->conn->prepare($query);
-
+        $stmt = $db->prepare($query);
         $stmt->bindParam(':alumno_id', $alumnoId);
         $stmt->bindParam(':materia_id', $materiaId);
 

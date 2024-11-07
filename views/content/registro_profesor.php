@@ -54,7 +54,7 @@ $profesores = Profesor::obtenerProfesores();
                 <label for="contrasena">Contraseña:</label>
                 <input type="text" name="contrasena" id="contrasena" required>
 
-                <button type="submit" name="profesor">Registrar profesor</button>
+                <input type="button" name="profesor" class="btn-registro">Registrar
             </form>
         </div>
 
@@ -83,7 +83,7 @@ $profesores = Profesor::obtenerProfesores();
                     <option value="">Seleccione una materia</option>
                 </select>
 
-                <button type="submit" name="asociar_materias_profesor">Asociar materia</button>
+                <button type="submit" name="asociar_materias_profesor" class="btn-registro">Asociar materia</button>
             </form>
         </div>
     </div>

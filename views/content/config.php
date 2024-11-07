@@ -19,7 +19,7 @@ $instituciones = Institucion::obtenerInstituciones();
 <body>
     <a href="../../index.php" class="home-btn">Inicio</a>
     <div class="container">
-        <form method="post" action="../../main.php" id="formulario_registro">
+        <form method="post" action="../../main.php">
             <table id="mi-tabla">
                 <thead>
                     <tr>
@@ -63,7 +63,7 @@ $instituciones = Institucion::obtenerInstituciones();
                     } ?>
                 </tbody>
             </table>
-            <input type="button" value="Modificar" name="modificar_parametros" onclick="actualizarParametros()">
+            <button type="submit" name="modificar_parametros" class="btn-registro">Modificar</button>
         </form>
     </div>
 </body>

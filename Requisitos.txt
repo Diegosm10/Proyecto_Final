@@ -62,10 +62,4 @@ function actualizarCondicion(alumno_id):
     
     Crear repositoria en github y subirlo ahi
     va a tener que tener un archivo de texto en el que se explique lo que tiene que hacer el profesor
-    para utilizarlo
-
-
-    implementacion 
-    mysqli -> Utiliza el motor de la base de datos de mysql 
-    PDO -> Es una capa de abstraccion escrito en php que gestiona la conexion a la bd
-    Permite trabajar con distintos motores de base de datos: mysql, MariaDB, Oracle, Postgres
+    para utilizarlo.

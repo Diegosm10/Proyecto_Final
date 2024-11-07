@@ -25,7 +25,6 @@ function limpiarCadena($cadena)
 
 function verificarDatos($filtro, $cadena)
 {
-    // Verifica que la cadena cumpla con el filtro 
     if (preg_match("/^" . $filtro . "$/", $cadena)) {
         return false;
     } else {
@@ -81,13 +80,18 @@ function obtenerCondicionAlumnos($promedio_asistencia, $promedio_notas, $institu
     $condiciones = [];
 
     foreach ($promedio_notas as $alumnoId => $promedioNota) {
-        $promedioAsistencia = $promedio_asistencia[$alumnoId];
+        $promedioAsistencia = isset($promedio_asistencia[$alumnoId]) ? $promedio_asistencia[$alumnoId] : 0;
 
+        // Verificar si el alumno cumple con los requisitos para "Promoción"
         if ($promedioNota >= $nota_promocion && $promedioAsistencia >= $asistencia_promocion) {
             $condiciones[$alumnoId] = 'Promoción';
-        } elseif ($promedioNota >= $nota_regular && $promedioAsistencia >= $asistencia_regular) {
+        }
+        // Si no, verificar si cumple con los requisitos para "Regular"
+        elseif ($promedioNota >= $nota_regular && $promedioAsistencia >= $asistencia_regular) {
             $condiciones[$alumnoId] = 'Regular';
-        } else {
+        }
+        // Si no cumple con los dos anteriores, asignar "Libre"
+        else {
             $condiciones[$alumnoId] = 'Libre';
         }
     }

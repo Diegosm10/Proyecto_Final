@@ -149,12 +149,13 @@ if (isset($_POST["matricular"])) {
 }
 
 if (isset($_POST["asociar_alumno_materia"])) {
-    $alumno = new Alumno($db);
+    var_dump($_POST);
+    $alumnoId = $_POST['alumno_id'];
+    $materiaId = $_POST['materia_id'];
 
-    $alumnoId = limpiarCadena($_POST['alumno_id']);
-    $materiaId = limpiarCadena($_POST['materia_id']);
+    $resultado = Alumno::matricularAlumno($materiaId, $alumnoId);
 
-    if ($alumno->matricularAlumno($materiaId, $alumnoId)) {
+    if ($resultado) {
         header("location: views/content/registro_alumno.php");
         exit;
     }
@@ -206,15 +207,55 @@ if (isset($_POST['modificar_parametros'])) {
     $asistencia_promocion = $_POST['asistencia_promocion'];
 
     foreach ($institucionids as $institucionid) {
-        $nota_regular = isset($nota_regular[$institucionid]) ? ($nota_regular[$institucionid]) : null;
-        $nota_promocion = isset($nota_promocion[$institucionid]) ? ($nota_promocion[$institucionid]) : null;
-        $asistencia_regular = isset($asistencia_regular[$institucionid]) ? ($asistencia_regular[$institucionid]) : null;
-        $asistencia_promocion = isset($asistencia_promocion[$institucionid]) ? ($asistencia_promocion[$institucionid]) : null;
+        $nota_regular_value = isset($nota_regular[$institucionid]) ? $nota_regular[$institucionid] : null;
+        $nota_promocion_value = isset($nota_promocion[$institucionid]) ? $nota_promocion[$institucionid] : null;
+        $asistencia_regular_value = isset($asistencia_regular[$institucionid]) ? $asistencia_regular[$institucionid] : null;
+        $asistencia_promocion_value = isset($asistencia_promocion[$institucionid]) ? $asistencia_promocion[$institucionid] : null;
 
-        if ($nota_regular !== null && $nota_promocion !== null && $asistencia_regular !== null && $nota_promocion !== null) {
-            Institucion::actualizarParametros($institucionid, $nota_regular, $nota_promocion, $asistencia_regular, $nota_promocion);
-            header("location: views/content/config.php");
+        // Verificamos que todos los parámetros estén presentes antes de actualizar
+        if ($nota_regular_value !== null && $nota_promocion_value !== null && $asistencia_regular_value !== null && $asistencia_promocion_value !== null) {
+            // Llamamos a la función de actualización con los parámetros correctos
+            Institucion::actualizarParametros($institucionid, $nota_regular_value, $nota_promocion_value, $asistencia_regular_value, $asistencia_promocion_value);
         }
+    }
+
+    // Después de actualizar todos los parámetros, redirigimos
+    header("location: views/content/config.php");
+    exit; // Asegúrate de que el script no continúe ejecutándose después de la redirección
+}
+
+if (isset($_POST["editar_alumno"])) {
+    $alumnoId = limpiarCadena($_POST["id"]);
+    $nombre = limpiarCadena($_POST["nombre"]);
+    $apellido = limpiarCadena($_POST["apellido"]);
+    $dni = limpiarCadena($_POST["dni"]);
+    $email = limpiarCadena($_POST["email"]);
+    $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
+
+    $alumno = new Alumno($db);
+    $alumno->setNombre($nombre);
+    $alumno->setApellido($apellido);
+    $alumno->setDni($dni);
+    $alumno->setEmail($email);
+    $alumno->setFechaNacimiento($fecha_nacimiento);
+
+    if ($alumno->actualizarAlumno($alumnoId)) {
+        header("Location: /views/content/mostrar_alumnos.php");
+        exit;
+    } else {
+        echo "Error al actualizar el alumno.";
+    }
+}
+
+if (isset($_GET['eliminar_alumno']) && isset($_GET['id'])) {
+    $alumnoId = $_GET['id'];
+    $resultado = Alumno::eliminarAlumno($alumnoId);
+
+    if ($resultado) {
+        header('Location: views/content/mostrar_alumnos.php');
+        exit;
+    } else {
+        echo 'Hubo un problema al eliminar al alumno.';
     }
 }
 

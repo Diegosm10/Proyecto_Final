@@ -23,7 +23,7 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
     <div class="container">
         <div class="menu-card">
             <h2>Registrar Alumno</h2>
-            <form method="POST" action="../../main.php" id="formulario_registro">
+            <form method="post" action="../../main.php" id="registroFormAlumno">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
 
@@ -38,15 +38,14 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
 
                 <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
                 <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
-                <input type="button" name="matricular" onclick="registrarAlumno()" value="Registrar Alumno">
-
+                <button type="submit" class="btn-registro" name="matricular">Registrar</button>
             </form>
         </div>
 
 
         <div class="menu-card">
             <h2>Matricular a materias</h2>
-            <form method="POST" action="../../main.php" id="formulario_registro">
+            <form method="post" action="../../main.php" onsubmit="evitar_envio_formulario()">
                 <label for="alumno_id">Alumno:</label>
                 <select id="alumno_id" name="alumno_id" required>
                     <option value="">Seleccione un alumno</option>
@@ -66,8 +65,7 @@ $alumnos = Alumno::obtenerAlumnos(); ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
-                <input type="button" value="Matricular" name="asociar_alumno_materia"
-                    onclick="registrarMateriaAlumno()">
+                <button type="submit" class="btn-registro" name="asociar_alumno_materia">Matricular a materia</button>
             </form>
         </div>
 

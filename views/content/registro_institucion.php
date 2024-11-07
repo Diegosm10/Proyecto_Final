@@ -25,7 +25,7 @@ $instituciones = Institucion::obtenerInstituciones();
     <div class="container">
         <div class="menu-card">
             <h2>Dar de alta institucion</h2>
-            <form action="main.php" method="post">
+            <form action="../../main.php" method="post">
 
                 <label for="nombre_institucion">Nombre:</label>
                 <input type="text" name="nombre_institucion" id="nombre_institucion" required>
@@ -37,20 +37,32 @@ $instituciones = Institucion::obtenerInstituciones();
                 <input type="text" name="telefono" id="telefono" minlength="10" maxlength="10" required>
 
                 <label for="email_institucion">Email:</label>
-                <input type="text" name="email_institucion" id="email_institucion" required>
+                <input type="email" name="email_institucion" id="email_institucion" required>
 
                 <label for="cue">CUE:</label>
                 <input type="text" name="cue" id="cue" minlength="8" maxlength="8" required>
 
-                <button type="submit" name="institucion">Registrar institucion</button>
+                <p>Parametros RAM:</p>
+                <label for="nota_regular">Nota para regular:</label>
+                <input type="number" name="nota_regular" id="nota_regular" required>
 
+                <label for="nota_promocion">Nota para promoción:</label>
+                <input type="number" name="nota_promocion" id="nota_promocion" required>
+
+                <label for="asistencia_regular">Asistencia para regular:</label>
+                <input type="number" name="asistencia_regular" id="asistencia_regular" required>
+
+                <label for="asistencia_promocion">Asistencia para promoción:</label>
+                <input type="number" name="asistencia_promocion" id="asistencia_promocion" required>
+
+                <button type="submit" name="institucion" class="btn-registro">Registrar</button>
             </form>
         </div>
 
 
         <div class="menu-card">
             <h2>Añadir materias a instituciones</h2>
-            <form action="main.php" method="post">
+            <form action="main.php" method="post" class="formulario">
 
                 <label for="materias">Materia:</label>
                 <select id="materias" name="materias">
@@ -68,7 +80,8 @@ $instituciones = Institucion::obtenerInstituciones();
                     <?php endforeach; ?>
                 </select>
 
-                <button type="submit" name="asociar_materia">Agregar materia</button>
+                <button type="submit" name="asociar_materia" class="btn-registro">Agregar
+                    materia</button>
 
             </form>
         </div>
@@ -76,5 +89,6 @@ $instituciones = Institucion::obtenerInstituciones();
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../js/fn.js"></script>
 
 </html>
