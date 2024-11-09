@@ -1,7 +1,9 @@
 <?php
-require "Persona.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/LimpiezaDato.php';
 class Profesor extends Persona
 {
+    use LimpiezaDato;
+
     private $conn;
     private $table = 'profesores';
     protected $legajo;

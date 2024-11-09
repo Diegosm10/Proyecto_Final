@@ -3,7 +3,6 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/funciones.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 
@@ -31,6 +30,8 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
     <a href="../../index.php" class="home-btn">Inicio</a>
     <div class="container">
         <h2>Listado de alumnos</h2>
+        <a href="ver_condicion.php" class="btn-registro">Ver
+            condición</a>
         <table id="mi-tabla">
             <thead>
                 <tr>
@@ -63,8 +64,7 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
                 } ?>
             </tbody>
         </table>
-        <a href="ver_condicion.php" class="btn-registro">Ver
-            condición</a>
+
     </div>
 </body>
 <script src="../js/fn.js"></script>

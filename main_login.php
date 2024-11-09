@@ -1,14 +1,11 @@
 <?php
-
 require "conexion.php";
-require "funciones.php";
-
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Usuario.php';
 session_start();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = limpiarCadena($_POST["email"]);
-    $contrasena = limpiarCadena($_POST["contrasena"]);
+    $email = Usuario::limpiarCadena($_POST["email"]);
+    $contrasena = Usuario::limpiarCadena($_POST["contrasena"]);
 
     $database = new Database();
     $db = $database->connect();

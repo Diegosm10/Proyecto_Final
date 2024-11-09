@@ -1,7 +1,8 @@
 <?php
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/LimpiezaDato.php';
 class Persona
 {
+    use LimpiezaDato;
 
     protected $nombre;
     protected $apellido;
@@ -18,35 +19,43 @@ class Persona
         $this->fecha_nacimiento = $fecha_nacimiento;
     }
 
-    public function getNombre(){
+    public function getNombre()
+    {
         return $this->nombre;
     }
 
-    public function getApellido(){
+    public function getApellido()
+    {
         return $this->apellido;
     }
 
-    public function getDni(){
+    public function getDni()
+    {
         return $this->dni;
     }
 
-    public function getEmail(){
+    public function getEmail()
+    {
         return $this->email;
     }
 
-    public function setNombre($nombre){
+    public function setNombre($nombre)
+    {
         return $this->nombre = $nombre;
     }
 
-    public function setApellido($apellido){
+    public function setApellido($apellido)
+    {
         return $this->apellido = $apellido;
     }
 
-    public function setDni($dni){
+    public function setDni($dni)
+    {
         return $this->dni = $dni;
     }
 
-    public function setFechaNacimiento($fecha_nacimiento){
+    public function setFechaNacimiento($fecha_nacimiento)
+    {
         return $this->fecha_nacimiento = $fecha_nacimiento;
     }
 

@@ -1,7 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/conexion.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Alumno.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/funciones.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/guardar_sesion.php';
 
 if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
@@ -12,7 +11,7 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
 
 }
 
-$promedios = obtenerPromedioNotas($materiaId);
+$promedios = Alumno::obtenerPromedioNotas($materiaId);
 
 $asistencias = [];
 $condiciones = [];
@@ -32,8 +31,8 @@ if (isset($_POST['dias_totales']) && $_POST['dias_totales'] > 0) {
     }
 
     if ($notasCompletas) {
-        $asistencias = obtenerPromedioAsistencias($materiaId, $diasTotales);
-        $condiciones = obtenerCondicionAlumnos($asistencias, $promedios, $institucionId);
+        $asistencias = Alumno::obtenerPromedioAsistencias($materiaId, $diasTotales);
+        $condiciones = Alumno::obtenerCondicionAlumnos($asistencias, $promedios, $institucionId);
     } else {
         echo 'Le faltan registrar notas para obtener su condicion de alumno';
     }

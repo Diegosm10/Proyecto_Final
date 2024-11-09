@@ -6,7 +6,8 @@ require_once "controllers/Institucion.php";
 require_once "controllers/Profesor.php";
 require_once "controllers/Alumno.php";
 require_once 'controllers/Materia.php';
-require_once 'funciones.php';
+
+session_start();
 
 $database = new Database();
 $db = $database->connect();
@@ -21,13 +22,13 @@ if (isset($_POST["profesor"])) {
 
     $usuario = new Usuario($db);
 
-    $nombre = limpiarCadena($_POST["nombre_profesor"]);
-    $apellido = limpiarCadena($_POST["apellido"]);
-    $email = limpiarCadena($_POST["email_profesor"]);
-    $dni = limpiarCadena($_POST["dni"]);
-    $legajo = limpiarCadena($_POST["legajo"]);
-    $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
-    $password = limpiarCadena($_POST["contrasena"]);
+    $nombre = Usuario::limpiarCadena($_POST["nombre_profesor"]);
+    $apellido = Usuario::limpiarCadena($_POST["apellido"]);
+    $email = Usuario::limpiarCadena($_POST["email_profesor"]);
+    $dni = Usuario::limpiarCadena($_POST["dni"]);
+    $legajo = Usuario::limpiarCadena($_POST["legajo"]);
+    $fecha_nacimiento = Usuario::limpiarCadena($_POST["fecha_nacimiento"]);
+    $password = Usuario::limpiarCadena($_POST["contrasena"]);
 
     $usuario->nombre = $nombre;
     $usuario->apellido = $apellido;
@@ -35,16 +36,16 @@ if (isset($_POST["profesor"])) {
     $usuario->setPassword($password);
     $usuario->condicion = "profesor";
 
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+    if (Usuario::verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
         $errors['nombre'] = "El nombre solo puede contener letras.";
     }
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
+    if (Usuario::verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
         $errors['apellido'] = "El apellido solo puede contener letras.";
     }
-    if (verificarDatos("^\d{7,8}$", $dni)) {
+    if (Usuario::verificarDatos("^\d{7,8}$", $dni)) {
         $errors['dni'] = "El DNI debe ser un número de 7 u 8 dígitos.";
     }
-    if (verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
+    if (Usuario::verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
         $errors['email'] = "Por favor ingrese un email válido.";
     }
 
@@ -70,9 +71,9 @@ if (isset($_POST["profesor"])) {
 }
 
 if (isset($_POST["asociar_materias_profesor"])) {
-    $profesor_id = limpiarCadena($_POST["profesor_id"]);
-    $materia_id = limpiarCadena($_POST["materia_id"]);
-    $institucion_id = limpiarCadena($_POST["institucion_id"]);
+    $profesor_id = Profesor::limpiarCadena($_POST["profesor_id"]);
+    $materia_id = Profesor::limpiarCadena($_POST["materia_id"]);
+    $institucion_id = Profesor::limpiarCadena($_POST["institucion_id"]);
 
     $profesor_id = intval($profesor_id);
     $materia_id = intval($materia_id);
@@ -95,15 +96,15 @@ if (isset($_POST["institucion"])) {
 
     $institucion = new Institucion($db);
 
-    $nombre = limpiarCadena($_POST["nombre_institucion"]);
-    $direccion = limpiarCadena($_POST["direccion"]);
-    $telefono = limpiarCadena($_POST["telefono"]);
-    $email = limpiarCadena($_POST["email_institucion"]);
-    $cue = limpiarCadena($_POST["cue"]);
-    $nota_regular = limpiarCadena($_POST["nota_regular"]);
-    $nota_promocion = limpiarCadena($_POST["nota_promocion"]);
-    $asistencia_regular = limpiarCadena($_POST["asistencia_regular"]);
-    $asistencia_promocion = limpiarCadena($_POST["asistencia_promocion"]);
+    $nombre = Institucion::limpiarCadena($_POST["nombre_institucion"]);
+    $direccion = Institucion::limpiarCadena($_POST["direccion"]);
+    $telefono = Institucion::limpiarCadena($_POST["telefono"]);
+    $email = Institucion::limpiarCadena($_POST["email_institucion"]);
+    $cue = Institucion::limpiarCadena($_POST["cue"]);
+    $nota_regular = Institucion::limpiarCadena($_POST["nota_regular"]);
+    $nota_promocion = Institucion::limpiarCadena($_POST["nota_promocion"]);
+    $asistencia_regular = Institucion::limpiarCadena($_POST["asistencia_regular"]);
+    $asistencia_promocion = Institucion::limpiarCadena($_POST["asistencia_promocion"]);
 
 
 
@@ -123,22 +124,10 @@ if (isset($_POST["institucion"])) {
 }
 
 if (isset($_POST["materia"])) {
-    $errors = [];
-
 
     $materia = new Materia($db);
 
-    $nombre = limpiarCadena($_POST["nombre_materia"]);
-
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
-        $errors['nombre'] = "El nombre solo puede contener letras.";
-    }
-
-    if (!empty($errors)) {
-        $query = http_build_query($errors);
-        header("Location: views/content/registro_materias.php?$query");
-        exit;
-    }
+    $nombre = Materia::limpiarCadena($_POST["nombre_materia"]);
 
     $materia->nombre = $nombre;
 
@@ -151,8 +140,8 @@ if (isset($_POST["materia"])) {
 
 if (isset($_POST["asociar_materia_institucion"])) {
 
-    $selector_materia = limpiarCadena($_POST["materias"]);
-    $selector_institucion = limpiarCadena($_POST["instituciones"]);
+    $selector_materia = Materia::limpiarCadena($_POST["materias"]);
+    $selector_institucion = Materia::limpiarCadena($_POST["instituciones"]);
 
     $consulta = "INSERT INTO materias_institucion (institucion_id, materias_id)
     VALUES (:institucion_id, :materias_id)";
@@ -175,24 +164,22 @@ if (isset($_POST["asociar_materia_institucion"])) {
 if (isset($_POST["matricular"])) {
     $errors = [];
 
+    $nombre = Alumno::limpiarCadena($_POST["nombre"]);
+    $apellido = Alumno::limpiarCadena($_POST["apellido"]);
+    $dni = Alumno::limpiarCadena($_POST["dni"]);
+    $email = Alumno::limpiarCadena($_POST["email"]);
+    $fecha_nacimiento = Alumno::limpiarCadena($_POST["fecha_nacimiento"]);
 
-
-    $nombre = limpiarCadena($_POST["nombre"]);
-    $apellido = limpiarCadena($_POST["apellido"]);
-    $dni = limpiarCadena($_POST["dni"]);
-    $email = limpiarCadena($_POST["email"]);
-    $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
-
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+    if (Alumno::verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
         $errors['nombre'] = "El nombre solo puede contener letras.";
     }
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
+    if (Alumno::verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
         $errors['apellido'] = "El apellido solo puede contener letras.";
     }
-    if (verificarDatos("^\d{7,8}$", $dni)) {
+    if (Alumno::verificarDatos("^\d{7,8}$", $dni)) {
         $errors['dni'] = "El DNI debe ser un número de 7 u 8 dígitos.";
     }
-    if (verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
+    if (Alumno::verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
         $errors['email'] = "Por favor ingrese un email válido.";
     }
 
@@ -268,6 +255,17 @@ if (isset($_POST['asistencia'])) {
 
         }
     }
+
+    $cumpleanos = Alumno::obtenerCumpleanos($fecha);
+    if (!empty($cumpleanos)) {
+        $nombres_cumpleanos = [];
+        foreach ($cumpleanos as $alumnoId => $fecha_nacimiento) {
+            $alumno = Alumno::obtenerAlumnoPorId($alumnoId);
+            $nombres_cumpleanos[] = $alumno['nombre'] . ' ' . $alumno['apellido'];
+        }
+        $_SESSION['mensaje_cumpleanos'] = "Hoy cumplen años: " . implode(", ", $nombres_cumpleanos) . "!";
+    }
+
     $_SESSION['mensaje_exito'] = "Las asistencias se registraron exitosamente.";
     header("location: views/content/registro_asistencia.php");
     exit;
@@ -296,23 +294,23 @@ if (isset($_POST['modificar_parametros'])) {
 }
 
 if (isset($_POST["editar_alumno"])) {
-    $alumnoId = limpiarCadena($_POST["id"]);
-    $nombre = limpiarCadena($_POST["nombre"]);
-    $apellido = limpiarCadena($_POST["apellido"]);
-    $dni = limpiarCadena($_POST["dni"]);
-    $email = limpiarCadena($_POST["email"]);
-    $fecha_nacimiento = limpiarCadena($_POST["fecha_nacimiento"]);
+    $alumnoId = Alumno::limpiarCadena($_POST["id"]);
+    $nombre = Alumno::limpiarCadena($_POST["nombre"]);
+    $apellido = Alumno::limpiarCadena($_POST["apellido"]);
+    $dni = Alumno::limpiarCadena($_POST["dni"]);
+    $email = Alumno::limpiarCadena($_POST["email"]);
+    $fecha_nacimiento = Alumno::limpiarCadena($_POST["fecha_nacimiento"]);
 
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
+    if (Alumno::verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $nombre)) {
         $errors['nombre'] = "El nombre solo puede contener letras.";
     }
-    if (verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
+    if (Alumno::verificarDatos("^[a-zA-ZáéíóúÁÉÍÓÚ\s]+$", $apellido)) {
         $errors['apellido'] = "El apellido solo puede contener letras.";
     }
-    if (verificarDatos("^\d{7,8}$", $dni)) {
+    if (Alumno::verificarDatos("^\d{7,8}$", $dni)) {
         $errors['dni'] = "El DNI debe ser un número de 7 u 8 dígitos.";
     }
-    if (verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
+    if (Alumno::verificarDatos("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", $email)) {
         $errors['email'] = "Por favor ingrese un email válido.";
     }
 

@@ -1,7 +1,8 @@
 <?php
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/LimpiezaDato.php';
 class Materia
 {
+    use LimpiezaDato;
 
     private $conn;
 

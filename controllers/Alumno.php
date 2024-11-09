@@ -1,8 +1,11 @@
 <?php
-require_once "Persona.php";
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/LimpiezaDato.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/CalculoAcademico.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
 class Alumno extends Persona
 {
+    use CalculoAcademico, LimpiezaDato;
+
     private $conn;
 
     public function __construct($db)
@@ -255,6 +258,32 @@ class Alumno extends Persona
             ];
         }
         return $notas;
+    }
+
+    public static function obtenerCumpleanos($fecha)
+    {
+        $database = new Database();
+        $db = $database->connect();
+
+        $fecha_dia = date('d', strtotime($fecha));
+        $fecha_mes = date('m', strtotime($fecha));
+
+        $query = "SELECT * FROM alumnos INNER JOIN asistencias ON 
+        alumnos.id = asistencias.alumno_id WHERE DAY(alumnos.fecha_nacimiento) = :fecha_dia AND
+        MONTH(alumnos.fecha_nacimiento) = :fecha_mes";
+
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':fecha_dia', $fecha_dia);
+        $stmt->bindParam(':fecha_mes', $fecha_mes);
+        $stmt->execute();
+
+        $cumpleanos = [];
+
+        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $cumpleanos[$row['alumno_id']] = $row['fecha_nacimiento'];
+        }
+
+        return $cumpleanos;
     }
 
 }

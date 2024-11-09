@@ -18,7 +18,7 @@ if (isset($_SESSION['mensaje_exito'])) {
                     title: 'Registro Exitoso',
                     text: '" . $_SESSION['mensaje_exito'] . "',
                     confirmButtonText: 'Aceptar',
-                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                    timer: 1400
                 });
             });
         </script>";

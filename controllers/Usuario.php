@@ -1,7 +1,9 @@
 <?php
-
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/LimpiezaDato.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/controllers/Persona.php';
 class Usuario
 {
+    use LimpiezaDato;
 
     private $conn;
     private $table = 'usuarios';

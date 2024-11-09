@@ -1,8 +1,8 @@
 <?php
-
-require_once 'Materia.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/traits/LimpiezaDato.php';
 class Institucion
 {
+    use LimpiezaDato;
 
     private $conn;
     private $table = 'instituciones';
@@ -122,7 +122,7 @@ class Institucion
         $database = new Database();
         $db = $database->connect();
 
-        $query = "SELECT * FROM ram WHERE $institucionId = :institucion_id";
+        $query = "SELECT * FROM ram WHERE institucion_id = :institucion_id";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':institucion_id', $institucionId);
         $stmt->execute();

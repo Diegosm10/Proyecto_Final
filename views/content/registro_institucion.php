@@ -29,6 +29,7 @@ if (isset($_SESSION['mensaje_exito'])) {
         </script>";
     unset($_SESSION['mensaje_exito']);
 }
+
 ?>
 
 <!DOCTYPE html>

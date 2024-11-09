@@ -14,7 +14,7 @@ if (isset($_SESSION['institucion_id']) && isset($_SESSION['materia_id'])) {
     $alumnos = Alumno::mostrarAlumnosMatriculados($institucionId, $materiaId);
 }
 
-if (isset($_SESSION['mensaje_exito'])) {
+if (isset($_SESSION['mensaje_exito']) && isset($_SESSION['mensaje_cumpleanos'])) {
     echo "<script>
             document.addEventListener('DOMContentLoaded', function() {
                 Swal.fire({
@@ -22,7 +22,28 @@ if (isset($_SESSION['mensaje_exito'])) {
                     title: 'Registro Exitoso',
                     text: '" . $_SESSION['mensaje_exito'] . "',
                     confirmButtonText: 'Aceptar',
-                    timer: 3000  // Duración de la alerta en milisegundos (opcional)
+                    timer: 1400
+                }).then(function() {
+                    Swal.fire({
+                        icon: 'info',
+                        title: '¡Cumpleaños!',
+                        text: '" . $_SESSION['mensaje_cumpleanos'] . "',
+                        confirmButtonText: 'Felicitar'
+                    });
+                });
+            });
+        </script>";
+    unset($_SESSION['mensaje_exito']);
+    unset($_SESSION['mensaje_cumpleanos']);
+} elseif (isset($_SESSION['mensaje_exito'])) {
+    echo "<script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro Exitoso',
+                    text: '" . $_SESSION['mensaje_exito'] . "',
+                    confirmButtonText: 'Aceptar',
+                    timer: 1400
                 });
             });
         </script>";
@@ -47,7 +68,7 @@ if (isset($_SESSION['mensaje_exito'])) {
         <form method="post" action="../../main.php" id="formulario">
             <h2>Listado de alumnos matriculados</h2>
             <label for="fecha">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" required>
+            <input type="date" id="fecha" name="fecha" value="<?php echo date('Y-m-d'); ?>" required>
             <table id="mi-tabla">
                 <thead>
                     <tr>
